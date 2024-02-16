@@ -22,10 +22,8 @@ import androidx.fragment.app.FragmentActivity;
 public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
     public static final String NAME = "SimpleBiometrics";
 
-    static final int authenticators =  BiometricManager.Authenticators.BIOMETRIC_STRONG
-        | BiometricManager.Authenticators.BIOMETRIC_WEAK;
-
-
+    static final int authenticators =  BiometricManager.Authenticators.BIOMETRIC_STRONG;
+  
     public SimpleBiometricsModule(ReactApplicationContext reactContext) {
         super(reactContext);
     }
