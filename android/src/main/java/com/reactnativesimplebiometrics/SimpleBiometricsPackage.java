@@ -16,7 +16,7 @@ public class SimpleBiometricsPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new SimpleBiometricsModule(reactContext));
+        modules.add(new FaceIDAuthModule(reactContext));
         return modules;
     }
 
