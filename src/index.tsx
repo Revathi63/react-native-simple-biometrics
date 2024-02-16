@@ -6,7 +6,7 @@ const { SimpleBiometrics: RNBiometricsNative } = NativeModules;
  * check if authentication is possible
  */
 const canAuthenticate = (): Promise<boolean> => {
-  return RNBiometricsNative.canAuthenticate();
+  return RNBiometricsNative.authenticate();
 };
 
 /**
