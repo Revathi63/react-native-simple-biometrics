@@ -23,8 +23,8 @@ public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
     public static final String NAME = "SimpleBiometrics";
 
     static final int authenticators =  BiometricManager.Authenticators.BIOMETRIC_STRONG
-        | BiometricManager.Authenticators.BIOMETRIC_WEAK
-        | BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+        | BiometricManager.Authenticators.BIOMETRIC_WEAK;
+
 
     public SimpleBiometricsModule(ReactApplicationContext reactContext) {
         super(reactContext);
