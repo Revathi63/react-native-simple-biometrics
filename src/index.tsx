@@ -5,9 +5,10 @@ const { SimpleBiometrics: RNBiometricsNative } = NativeModules;
 /**kkkkk
  * check if authentication is possible
  */
-const canAuthenticate = () => {
+const canAuthenticate = (): Promise<boolean> => {
   return RNBiometricsNative.authenticate();
 };
+
 
 /**
  * request biometric authentication
@@ -34,7 +35,7 @@ const canAuthenticate = () => {
 
 const RNBiometrics = {
  // requestBioAuth,
-  authenticate,
+  canAuthenticate,
 };
 
 export default RNBiometrics;
