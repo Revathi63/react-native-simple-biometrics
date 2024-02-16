@@ -2,7 +2,7 @@ import { NativeModules } from 'react-native';
 
 const { SimpleBiometrics: RNBiometricsNative } = NativeModules;
 
-/**
+/**hhhhhh
  * check if authentication is possible
  */
 const canAuthenticate = (): Promise<boolean> => {
