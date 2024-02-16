@@ -21,11 +21,9 @@ import androidx.fragment.app.FragmentActivity;
 import android.util.Log;
 
 
-@ReactModule(name = SimpleBiometricsModule.NAME)
+public class FaceIDAuthModule extends ReactContextBaseJavaModule {
 
-public class SimpleBiometricsModule  extends ReactContextBaseJavaModule {
-
-    public SimpleBiometricsModule (ReactApplicationContext reactContext) {
+    public FaceIDAuthModule(ReactApplicationContext reactContext) {
         super(reactContext);
           BiometricManager biometricManager = BiometricManager.from(reactContext);
 
@@ -61,7 +59,7 @@ public class SimpleBiometricsModule  extends ReactContextBaseJavaModule {
     @NonNull
     @Override
     public String getName() {
-        return "SimpleBiometricsModule ";
+        return "FaceIDAuth";
     }
 
     @ReactMethod
