@@ -1,7 +1,10 @@
 package com.reactnativesimplebiometrics;
-
+import android.os.Build;
 import android.app.Activity;
+import android.content.DialogInterface;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.concurrent.Executor;
 import com.facebook.react.bridge.Promise;
@@ -15,7 +18,7 @@ import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricManager;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
+import android.util.Log;
 
 
 @ReactModule(name = SimpleBiometricsModule.NAME)
