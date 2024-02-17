@@ -15,6 +15,10 @@ import androidx.biometric.BiometricPrompt;
 import androidx.biometric.BiometricManager;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 
 
 
@@ -53,47 +57,76 @@ public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void requestBioAuth(final String title, final String subtitle, final Promise promise) {
-        UiThreadUtil.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            ReactApplicationContext context = getReactApplicationContext();
-                            Activity activity = getCurrentActivity();
-                            Executor mainExecutor = ContextCompat.getMainExecutor(context);
-                            final BiometricPrompt.AuthenticationCallback authenticationCallback = new BiometricPrompt.AuthenticationCallback() {
-                                @Override
-                                public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                                    super.onAuthenticationError(errorCode, errString);
-                                    promise.reject(new Exception(errString.toString()));
-                                }
 
-                                @Override
-                                public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                                    super.onAuthenticationSucceeded(result);
-                                    promise.resolve(true);
-                                }
-                            };
-
-                            if (activity != null) {
-                                BiometricPrompt prompt = new BiometricPrompt((FragmentActivity) activity, mainExecutor, authenticationCallback);
-
-                                BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                                        .setAllowedAuthenticators(authenticators)
-                                        .setTitle(title)
-                                        .setSubtitle(subtitle)
-                                        .build();
-
-                                prompt.authenticate(promptInfo);
-                            } else {
-                                throw new Exception("null activity");
-                            }
-                        } catch (Exception e) {
-                            promise.reject(e);
-                        }
-                    }
+          getCurrentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Activity activity = getCurrentActivity();
+                if (activity == null) {
+                    promise.reject("ACTIVITY_NULL", "Activity is null");
+                    return;
                 }
-        );
+                FragmentActivity fragmentActivity = (FragmentActivity) activity;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(fragmentActivity);
+                builder.setTitle("Select Biometric Method")
+                        .setItems(new CharSequence[]{"Face", "Fingerprint"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                 // authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_WEAK, promise);
+                                if (which == 0) {
+                                   // Authenticate with fingerprint
+                                    authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_WEAK, promise);
+                                } else {
+                                   // Authenticate with face
+                                    authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_STRONG, promise);
+                                }
+                            }
+                        });
+                builder.show();
+            }
+        });
+        // UiThreadUtil.runOnUiThread(
+        //         new Runnable() {
+        //             @Override
+        //             public void run() {
+        //                 try {
+        //                     ReactApplicationContext context = getReactApplicationContext();
+        //                     Activity activity = getCurrentActivity();
+        //                     Executor mainExecutor = ContextCompat.getMainExecutor(context);
+        //                     final BiometricPrompt.AuthenticationCallback authenticationCallback = new BiometricPrompt.AuthenticationCallback() {
+        //                         @Override
+        //                         public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+        //                             super.onAuthenticationError(errorCode, errString);
+        //                             promise.reject(new Exception(errString.toString()));
+        //                         }
+
+        //                         @Override
+        //                         public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+        //                             super.onAuthenticationSucceeded(result);
+        //                             promise.resolve(true);
+        //                         }
+        //                     };
+
+        //                     if (activity != null) {
+        //                         BiometricPrompt prompt = new BiometricPrompt((FragmentActivity) activity, mainExecutor, authenticationCallback);
+
+        //                         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+        //                                 .setAllowedAuthenticators(authenticators)
+        //                                 .setTitle(title)
+        //                                 .setSubtitle(subtitle)
+        //                                 .build();
+
+        //                         prompt.authenticate(promptInfo);
+        //                     } else {
+        //                         throw new Exception("null activity");
+        //                     }
+        //                 } catch (Exception e) {
+        //                     promise.reject(e);
+        //                 }
+        //             }
+        //         }
+        // );
 
     }
    private void authenticateWithBiometric(int authenticatorType, Promise promise) {
