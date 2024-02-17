@@ -96,4 +96,38 @@ public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
         );
 
     }
+   private void authenticateWithBiometric(int authenticatorType, Promise promise) {
+        FragmentActivity fragmentActivity = (FragmentActivity) getCurrentActivity();
+        BiometricPrompt.PromptInfo.Builder promptInfoBuilder = new BiometricPrompt.PromptInfo.Builder();
+        promptInfoBuilder.setTitle("Authenticate to unlock");
+        promptInfoBuilder.setSubtitle("");
+        promptInfoBuilder.setDescription("");
+        promptInfoBuilder.setNegativeButtonText("Cancel");
+        promptInfoBuilder.setAllowedAuthenticators(authenticatorType);
+
+        BiometricPrompt.PromptInfo promptInfo = promptInfoBuilder.build();
+
+        // Use FragmentActivity and its support library
+        BiometricPrompt biometricPrompt = new BiometricPrompt(fragmentActivity, fragmentActivity.getMainExecutor(), new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                promise.reject("AUTH_ERROR", errString.toString());
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                promise.resolve("Authenticated successfully");
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                promise.reject("AUTH_FAILED", "Authentication failed");
+            }
+        });
+
+        biometricPrompt.authenticate(promptInfo);
+    }
 }
