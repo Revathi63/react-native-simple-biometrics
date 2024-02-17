@@ -69,6 +69,24 @@ public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
                 FragmentActivity fragmentActivity = (FragmentActivity) activity;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(fragmentActivity);
+              
+                if (Build.VERSION.SDK_INT <= 31) {
+
+                builder.setTitle("Select Biometric Method")
+                        .setItems(new CharSequence[]{ "Fingerprint"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                 // authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_WEAK, promise);
+                                if (which == 0) {
+                                   // Authenticate with fingerprint
+                                    authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_STRONG, promise);
+                                } 
+                            }
+                        });
+                }
+                else
+                {
+
                 builder.setTitle("Select Biometric Method")
                         .setItems(new CharSequence[]{"Face", "Fingerprint"}, new DialogInterface.OnClickListener() {
                             @Override
@@ -83,6 +101,21 @@ public class SimpleBiometricsModule extends ReactContextBaseJavaModule {
                                 }
                             }
                         });
+                }
+                // builder.setTitle("Select Biometric Method")
+                //         .setItems(new CharSequence[]{"Face", "Fingerprint"}, new DialogInterface.OnClickListener() {
+                //             @Override
+                //             public void onClick(DialogInterface dialog, int which) {
+                //                  // authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_WEAK, promise);
+                //                 if (which == 0) {
+                //                    // Authenticate with fingerprint
+                //                     authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_WEAK, promise);
+                //                 } else {
+                //                    // Authenticate with face
+                //                     authenticateWithBiometric(BiometricManager.Authenticators.BIOMETRIC_STRONG, promise);
+                //                 }
+                //             }
+                //         });
                 builder.show();
             }
         });
